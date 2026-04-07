@@ -1,1804 +1,1021 @@
-/* =============== GLOBAL RESET =============== */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* =============== THEME VARIABLES (Cool Blue) =============== */
-:root {
-  --bg-page: #F5FAFF;          /* light page background */
-  --bg-beige: #FFFFFF;         /* card / input background (White) */
-  --bg-blue-soft: #E4F2FF;     /* very soft blue tint */
-  --border-beige: #D4E1EE;     /* soft blue-gray border */
-  --text-main: #2E3A43;        /* primary text */
-  --text-muted: #617480;       /* secondary text */
-  --heading-color: #0B4F6C;    /* headings */
-
-  --brown: #4FA3F7;            /* primary button / accent blue */
-  --accent-blue: #328DE8;      /* button hover / deeper blue */
-
-  /* Graph accent colors */
-  --graph-accent-1: #4FA3F7;
-  --graph-accent-2: #6CD4FF;
-  --graph-accent-3: #56E39F;
-  --graph-accent-4: #FFBC42;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: "Poppins", sans-serif;
-  /* Cool Blue background */
-  background: radial-gradient(
-    circle at top left,
-    var(--bg-page),
-    var(--bg-blue-soft)
-  );
-  color: var(--text-main);
-  line-height: 1.6;
-}
-
-/* Global focus styles for accessibility */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid var(--accent-blue);
-  outline-offset: 2px;
-}
-
-/* Hide-only visually (for captions etc.) */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  white-space: nowrap;
-  border: 0;
-}
-
-/* =============== TOP NAVBAR =============== */
-.top-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 64px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(212, 225, 238, 0.9); /* border-beige tint */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1.5rem;
-  z-index: 1000;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  color: var(--brown);
-}
-
-.logo-icon {
-  font-size: 1.4rem;
-}
-
-.logo-text {
-  font-size: 1.1rem;
-}
-
-.top-nav-links {
-  display: flex;
-  gap: 1rem;
-}
-
-.top-nav-links a {
-  color: var(--heading-color);
-  font-size: 0.9rem;
-  text-decoration: none;
-  padding: 0.35rem 0.8rem;
-  border-radius: 999px;
-  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.nav-dropdown {
-  position: relative;
-}
-
-.dropdown-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.9rem;
-  border: none;
-  border-radius: 999px;
-  background: transparent;
-  padding: 0.35rem 0.9rem;
-  color: var(--heading-color);
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.dropdown-toggle:hover,
-.dropdown-toggle:focus-visible {
-  background: #EAF3FB;
-  box-shadow: 0 4px 10px rgba(42, 53, 69, 0.15);
-}
-
-.nav-dropdown .dropdown-menu {
-  position: absolute;
-  top: calc(100% + 0.35rem);
-  left: 0;
-  min-width: 200px;
-  padding: 0.4rem 0;
-  border-radius: 0.9rem;
-  background: #ffffff;
-  border: 1px solid var(--border-beige);
-  box-shadow: 0 20px 40px rgba(46, 58, 67, 0.25);
-  list-style: none;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-6px);
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-  z-index: 1100;
-}
-
-.nav-dropdown.open .dropdown-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.nav-dropdown .dropdown-menu li {
-  margin: 0;
-}
-
-.nav-dropdown .dropdown-menu a {
-  display: block;
-  padding: 0.4rem 1rem;
-  font-size: 0.85rem;
-  color: var(--text-main);
-  text-decoration: none;
-}
-
-.nav-dropdown .dropdown-menu a:hover,
-.nav-dropdown .dropdown-menu a:focus-visible {
-  background: #EAF3FB;
-  color: var(--heading-color);
-}
-
-.top-nav-links a:hover {
-  background: #EAF3FB; /* soft blue tint */
-  color: var(--text-main);
-  box-shadow: 0 4px 10px rgba(42, 53, 69, 0.2);
-}
-
-/* Active nav link */
-.top-nav-links a.nav-active,
-.side-nav a.nav-active {
-  background: #D4E7F8;
-  color: var(--heading-color);
-  box-shadow: 0 4px 12px rgba(79, 163, 247, 0.35);
-}
-
-/* Top-right actions (theme + profile + mobile) */
-.top-nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: var(--text-main);
-  font-size: 1.4rem;
-  cursor: pointer;
-}
-
-/* Theme toggle */
-.theme-toggle {
-  border-radius: 999px;
-  border: 1px solid var(--border-beige);
-  padding: 0.25rem 0.6rem;
-  background: #ffffff;
-  font-size: 1rem;
-  cursor: pointer;
-  color: var(--text-main);
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
-}
-
-.theme-toggle:hover {
-  background: #EAF3FB;
-  box-shadow: 0 4px 10px rgba(79, 163, 247, 0.25);
-  transform: translateY(-1px);
-}
-
-/* =============== SIDE NAV =============== */
-.side-nav {
-  position: fixed;
-  top: 64px;
-  left: 0;
-  width: 220px;
-  bottom: 0;
-  background: #ffffff;
-  border-right: 1px solid var(--border-beige);
-  padding: 1.5rem 1rem;
-  overflow-y: auto;
-  z-index: 950;
-}
-
-.side-nav h2 {
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--brown);
-  margin-bottom: 0.75rem;
-}
-
-.side-nav ul {
-  list-style: none;
-}
-
-.side-nav li {
-  margin-bottom: 0.4rem;
-}
-
-.side-nav a {
-  display: block;
-  font-size: 0.9rem;
-  color: var(--text-main);
-  text-decoration: none;
-  padding: 0.4rem 0.6rem;
-  border-radius: 999px;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
-}
-
-.side-nav-dropdown {
-  position: relative;
-  margin-top: 0.5rem;
-  border-radius: 0.9rem;
-  overflow: visible;
-  border: 1px solid rgba(82, 106, 135, 0.2);
-  background: #ffffff;
-}
-
-.side-nav-dropdown .dropdown-toggle {
-  width: 100%;
-  text-align: left;
-  padding: 0.4rem 0.75rem;
-  font-size: 0.9rem;
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--heading-color);
-}
-
-.side-nav-dropdown .dropdown-caret {
-  font-size: 0.6rem;
-  color: var(--text-muted);
-}
-
-.side-nav-dropdown .side-nav-menu {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
-  margin: 0;
-  padding: 0.25rem 0;
-  list-style: none;
-  background: #ffffff;
-  border: 1px solid var(--border-beige);
-  box-shadow: 0 12px 30px rgba(46, 58, 67, 0.25);
-  visibility: hidden;
-  opacity: 0;
-  transform: translateY(-6px);
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-  z-index: 950;
-}
-
-.side-nav-dropdown.open .side-nav-menu {
-  visibility: visible;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.side-nav-dropdown .side-nav-menu li {
-  margin: 0;
-}
-
-.side-nav-dropdown .side-nav-menu a {
-  display: block;
-  padding: 0.35rem 1rem;
-  font-size: 0.85rem;
-  color: var(--text-main);
-  text-decoration: none;
-}
-
-.side-nav-dropdown .side-nav-menu a:hover {
-  background: #EAF3FB;
-  color: var(--heading-color);
-}
-
-.side-nav a:hover {
-  background: #EAF3FB;
-  color: var(--heading-color);
-  transform: translateX(2px);
-}
-
-/* Backdrop for side nav on mobile */
-.side-nav-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(42, 53, 69, 0.4);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 900;
-}
-
-.side-nav-backdrop.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* =============== MAIN CONTENT =============== */
-.main-content {
-  margin-top: 64px;
-  margin-left: 220px;
-  padding: 2rem;
-}
-
-/* Detail pages (without sidebar) */
-.detail-main {
-  margin-left: 0;
-  padding: 5.2rem 1.6rem 3rem;
-}
-
-.detail-section {
-  margin: 0 auto;
-  max-width: 960px;
-  padding: 2.5rem 2.2rem;
-}
-
-.detail-highlights {
-  list-style: none;
-  margin-top: 1.25rem;
-  padding-left: 0;
-  display: grid;
-  gap: 0.9rem;
-}
-
-.detail-highlights li {
-  padding: 0.6rem 0.9rem;
-  border-radius: 0.9rem;
-  background: #F1F5FF;
-  border: 1px solid var(--border-beige);
-  color: var(--text-main);
-  font-size: 0.92rem;
-}
-
-.detail-extra {
-  margin-top: 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.detail-extra .detail-chip {
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.75rem;
-  border: 1px solid var(--border-beige);
-  font-size: 0.8rem;
-  color: var(--heading-color);
-  background: #FFFFFF;
-}
-
-.detail-home-link {
-  font-size: 0.85rem;
-  padding: 0.35rem 1rem;
-}
-
-.detail-footer {
-  margin-top: 2rem;
-}
-
-.detail-action {
-  border-radius: 999px;
-  font-size: 0.85rem;
-  padding: 0.35rem 0.9rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
-
-/* =============== SECTIONS =============== */
-.section {
-  margin-bottom: 3rem;
-  padding: 2rem;
-  border-radius: 1.5rem;
-  background: #ffffff;
-  box-shadow: 0 20px 45px rgba(46, 58, 67, 0.12);
-  border: 1px solid var(--border-beige);
-}
-
-.section-header {
-  margin-bottom: 1.5rem;
-}
-
-.section-header h2 {
-  font-size: 1.6rem;
-  margin-bottom: 0.25rem;
-  color: var(--heading-color);
-}
-
-.section-header h1 {
-  font-size: 2.2rem;
-  margin-bottom: 0.25rem;
-  color: var(--heading-color);
-}
-
-.tagline {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-}
-
-.sub-section {
-  margin-top: 2rem;
-}
-
-/* =============== BUTTONS =============== */
-.primary-btn,
-.secondary-btn {
-  border: none;
-  cursor: pointer;
-  padding: 0.55rem 1.1rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: transform 0.1s ease, box-shadow 0.15s ease, background 0.2s ease,
-    color 0.2s ease;
-}
-
-/* Primary button: cool blue gradient */
-.primary-btn {
-  background: linear-gradient(135deg, var(--brown), var(--accent-blue));
-  color: #ffffff;
-  box-shadow: 0 12px 28px rgba(79, 163, 247, 0.4);
-}
-
-.primary-btn:hover {
-  background: var(--accent-blue); /* #328DE8 */
-  transform: translateY(-1px);
-  box-shadow: 0 16px 36px rgba(50, 141, 232, 0.6);
-}
-
-.secondary-btn {
-  background: #E7F1FF;
-  color: var(--text-main);
-  border: 1px solid var(--border-beige);
-}
-
-.secondary-btn:hover {
-  background: #D9E7FF;
-}
-
-/* =============== HOME / HERO =============== */
-.home {
-  min-height: calc(100vh - 64px);
-}
-
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 2rem;
-  margin-top: 1.5rem;
-}
-
-.hero-text h2 {
-  margin-bottom: 0.5rem;
-  color: var(--brown);
-}
-
-.hero-text p {
-  margin-bottom: 0.75rem;
-  color: var(--text-main);
-}
-
-.hero-bullets {
-  list-style: none;
-  margin-bottom: 1.25rem;
-}
-
-.hero-bullets li {
-  margin-bottom: 0.35rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
-.hero-dashboard {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-/* Getting started strip */
-.getting-started {
-  margin-top: 2rem;
-  padding: 1rem 1.1rem;
-  border-radius: 1.1rem;
-  background: #E9F3FF;
-  border: 1px dashed var(--border-beige);
-}
-
-.getting-started h3 {
-  font-size: 1.1rem;
-  margin-bottom: 0.6rem;
-  color: var(--heading-color);
-}
-
-.getting-started ol {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
-.getting-started li span {
-  font-weight: 600;
-  margin-right: 0.25rem;
-  color: var(--brown);
-}
-
-/* =============== CARDS =============== */
-.card {
-  background: #ffffff;
-  border-radius: 1.1rem;
-  padding: 1rem;
-  border: 1px solid var(--border-beige);
-  box-shadow: 0 14px 35px rgba(46, 58, 67, 0.12);
-}
-
-.card h3 {
-  margin-bottom: 0.4rem;
-  color: var(--heading-color);
-}
-
-.dashboard-card {
-  background: linear-gradient(135deg, var(--bg-page), var(--bg-blue-soft));
-  border-radius: 1.1rem;
-  padding: 1rem;
-  border: 1px solid #D4E7F8;
-  box-shadow: 0 14px 36px rgba(79, 163, 247, 0.25);
-}
-
-.dashboard-card h3 {
-  margin-bottom: 0.4rem;
-  color: var(--heading-color);
-}
-
-.mini-tagline {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-bottom: 0.75rem;
-}
-
-.mini-stats {
-  list-style: none;
-}
-
-.mini-stats li {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
-  margin-bottom: 0.3rem;
-  color: var(--text-main);
-}
-
-/* =============== PROGRESS BARS =============== */
-.progress-item {
-  margin-bottom: 0.6rem;
-}
-
-.progress-item span {
-  font-size: 0.8rem;
-}
-
-.progress-bar {
-  position: relative;
-  background: #DFE8F4;
-  border-radius: 999px;
-  overflow: hidden;
-  height: 8px;
-  margin: 0.25rem 0;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--graph-accent-1),
-    var(--graph-accent-2)
-  );
-}
-
-.progress-fill.alt {
-  background: linear-gradient(
-    90deg,
-    var(--graph-accent-3),
-    var(--graph-accent-4)
-  );
-}
-
-.progress-value {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-/* =============== GRID HELPERS =============== */
-.cards-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-/* =============== CALENDAR =============== */
-.calendar-layout {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 1.5rem;
-}
-
-.event-list {
-  list-style: none;
-}
-
-.event-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #E9F3FF;
-  padding: 0.6rem 0.75rem;
-  border-radius: 0.9rem;
-  margin-bottom: 0.5rem;
-  border: 1px solid var(--border-beige);
-  gap: 0.75rem;
-}
-
-.event-list strong {
-  font-size: 0.9rem;
-  color: var(--heading-color);
-}
-
-.event-list span {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-.event-label {
-  padding: 0.2rem 0.5rem;
-  border-radius: 999px;
-  background: #D4E7F8;
-  color: var(--heading-color);
-  font-size: 0.75rem;
-}
-
-.event-label.sports {
-  background: #F4E0C2; /* accent for sports */
-  color: #8B6A36;
-}
-
-.event-label.tech {
-  background: #EAF3FB;
-  color: var(--brown);
-}
-
-/* Mini calendar */
-.mini-calendar {
-  background: #ffffff;
-  border-radius: 1rem;
-  padding: 0.75rem;
-  border: 1px solid var(--border-beige);
-}
-
-.mini-calendar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--heading-color);
-}
-
-.dots-legend {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  display: inline-block;
-}
-
-.dot.academic {
-  background: var(--graph-accent-1);
-}
-
-.dot.event {
-  background: var(--graph-accent-4);
-}
-
-.mini-calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.25rem;
-  font-size: 0.7rem;
-}
-
-.mini-calendar-grid span {
-  text-align: center;
-  padding: 0.15rem 0;
-  border-radius: 0.3rem;
-  color: var(--text-muted);
-}
-
-.mini-calendar-grid span:nth-child(-n + 7) {
-  font-weight: 600;
-  color: var(--heading-color);
-}
-
-.has-event {
-  position: relative;
-  background: #D4E7F8;
-  color: var(--heading-color);
-}
-
-/* =============== TABLES =============== */
-.table-wrapper {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
-  margin-top: 0.5rem;
-  min-width: 480px;
-}
-
-.data-table th,
-.data-table td {
-  border: 1px solid var(--border-beige);
-  padding: 0.4rem 0.5rem;
-}
-
-.data-table th {
-  background: #E7F1FF;
-  color: var(--heading-color);
-}
-
-.data-table tr:nth-child(even) {
-  background: var(--bg-page);
-}
-
-.table-scroll-hint {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 0.35rem;
-  display: none;
-}
-
-/* Priority */
-.pri-high {
-  color: #B91C1C;
-  font-weight: 600;
-}
-
-.pri-medium {
-  color: #B45309;
-  font-weight: 500;
-}
-
-.pri-low {
-  color: #15803D;
-}
-
-/* =============== TASKS / TODO =============== */
-.tasks-layout {
-  display: grid;
-  grid-template-columns: 1.2fr 1.2fr;
-  gap: 1rem;
-}
-
-.todo-card {
-  margin-top: 1.5rem;
-}
-
-.todo-form {
-  display: grid;
-  grid-template-columns: 2fr 1.2fr 1.1fr auto;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.todo-form input,
-.todo-form select {
-  border-radius: 999px;
-  border: 1px solid var(--border-beige);
-  background: var(--bg-beige);
-  color: var(--text-main);
-  padding: 0.3rem 0.7rem;
-  font-size: 0.8rem;
-}
-
-.todo-list {
-  list-style: none;
-  margin-top: 0.5rem;
-}
-
-.todo-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  background: #E9F3FF;
-  border-radius: 0.9rem;
-  padding: 0.45rem 0.65rem;
-  margin-bottom: 0.45rem;
-  border: 1px solid var(--border-beige);
-}
-
-.todo-main {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.todo-main input[type="checkbox"] {
-  accent-color: var(--brown);
-}
-
-.todo-text {
-  font-size: 0.85rem;
-  color: var(--text-main);
-}
-
-.todo-meta {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.15rem;
-}
-
-.todo-priority {
-  font-size: 0.7rem;
-  padding: 0.15rem 0.4rem;
-  border-radius: 999px;
-}
-
-.todo-priority.High {
-  background: #FEE2E2;
-  color: #B91C1C;
-}
-
-.todo-priority.Medium {
-  background: #FEF3C7;
-  color: #B45309;
-}
-
-.todo-priority.Low {
-  background: #DCFCE7;
-  color: #166534;
-}
-
-.todo-completed .todo-text {
-  text-decoration: line-through;
-  color: #9CA3AF;
-}
-
-/* New todo animation */
-.todo-item-new {
-  animation: fadeInUp 0.25s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Empty state text */
-.empty-state {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-top: 0.3rem;
-}
-
-/* =============== SIMPLE ANALYTICS BARS =============== */
-.analytics-card {
-  margin-top: 1.5rem;
-}
-
-.analytics-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
-}
-
-.analytics-bar {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.analytics-label {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.analytics-bar-track {
-  width: 100%;
-  height: 80px;
-  border-radius: 0.75rem;
-  border: 1px dashed var(--border-beige);
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
-  background: #E9F3FF;
-}
-
-.analytics-bar-fill {
-  width: 100%;
-  border-radius: 0.75rem 0.75rem 0 0;
-  background: linear-gradient(
-    180deg,
-    var(--graph-accent-1),
-    var(--graph-accent-2)
-  );
-}
-
-/* =============== RESOURCES =============== */
-.resources-summary {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.resource-stat {
-  background: #E9F3FF;
-  padding: 0.6rem 0.75rem;
-  border-radius: 0.9rem;
-  border: 1px solid var(--border-beige);
-  font-size: 0.85rem;
-  color: var(--text-main);
-}
-
-.resource-grid {
-  margin-top: 0.5rem;
-}
-
-.resource-list {
-  list-style: none;
-  font-size: 0.8rem;
-}
-
-.resource-list li {
-  padding: 0.3rem 0;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px dashed var(--border-beige);
-}
-
-.resource-status {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-/* =============== DOUBTS =============== */
-.doubts-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1.2fr;
-  gap: 1rem;
-}
-
-.guidelines {
-  list-style: disc;
-  margin-left: 1.2rem;
-  margin-bottom: 0.75rem;
-  font-size: 0.85rem;
-  color: var(--text-main);
-}
-
-.doubt-form input,
-.doubt-form textarea {
-  width: 100%;
-  margin-bottom: 0.4rem;
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.7rem;
-  border: 1px solid var(--border-beige);
-  background: var(--bg-beige);
-  color: var(--text-main);
-  font-size: 0.85rem;
-}
-
-.doubt-form textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.forum-sample {
-  margin-top: 0.5rem;
-}
-
-.forum-post {
-  background: #E9F3FF;
-  padding: 0.5rem 0.6rem;
-  border-radius: 0.8rem;
-  border: 1px solid var(--border-beige);
-  margin-bottom: 0.4rem;
-}
-
-.forum-post h4 {
-  font-size: 0.9rem;
-  color: var(--heading-color);
-}
-
-.forum-post p {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-/* =============== ANNOUNCEMENTS =============== */
-.announcement-controls {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin-bottom: 1rem;
-  font-size: 0.85rem;
-  flex-wrap: wrap;
-  color: var(--text-main);
-}
-
-.announcement-controls select {
-  background: var(--bg-beige);
-  color: var(--text-main);
-  border-radius: 999px;
-  border: 1px solid var(--border-beige);
-  padding: 0.3rem 0.6rem;
-}
-
-.announcement-banners {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-}
-
-.announcement-banner {
-  padding: 0.9rem;
-  border-radius: 1rem;
-  background: #E9F3FF;
-  border: 2px solid var(--border-beige);
-  color: var(--text-muted);
-}
-
-.announcement-banner h3 {
-  margin-bottom: 0.3rem;
-  color: var(--text-muted);
-}
-
-.banner-meta {
-  margin-top: 0.4rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.badge {
-  padding: 0.15rem 0.45rem;
-  border-radius: 999px;
-  border: 1px solid var(--border-beige);
-}
-
-.badge.tech {
-  border-color: var(--graph-accent-1);
-}
-
-.badge.sports {
-  border-color: var(--graph-accent-2);
-}
-
-.badge.hackathon {
-  border-color: var(--graph-accent-3);
-}
-
-.badge.academic {
-  border-color: var(--brown);
-}
-
-.badge.show {
-  border-color: var(--graph-accent-4);
-}
-
-.badge.high {
-  background: #FEE2E2;
-}
-
-.badge.medium {
-  background: #FEF3C7;
-}
-
-.badge.low {
-  background: #DCFCE7;
-}
-
-/* =============== FEATURES =============== */
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-}
-
-.gpa-table input {
-  width: 100%;
-  background: var(--bg-beige);
-  border-radius: 0.5rem;
-  border: 1px solid var(--border-beige);
-  color: var(--text-main);
-  padding: 0.25rem 0.45rem;
-  font-size: 0.75rem;
-}
-
-.gpa-result {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--brown);
-}
-
-.gpa-result-highlight {
-  text-shadow: 0 0 8px rgba(79, 163, 247, 0.7);
-}
-
-/* Timers */
-.timer-display {
-  font-family: "Poppins", monospace;
-  font-size: 1.6rem;
-  text-align: center;
-  margin: 0.5rem 0;
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.9rem;
-  background: linear-gradient(135deg, var(--bg-page), var(--bg-blue-soft));
-  border: 1px solid #D4E7F8;
-  color: var(--heading-color);
-}
-
-.timer-controls {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-/* =============== QUIZ =============== */
-.quiz-layout {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.quiz-controls {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 0.5rem;
-  align-items: center;
-  margin-bottom: 0.8rem;
-  font-size: 0.85rem;
-}
-
-.quiz-controls select {
-  background: var(--bg-beige);
-  color: var(--text-main);
-  border-radius: 0.6rem;
-  border: 1px solid var(--border-beige);
-  padding: 0.3rem 0.5rem;
-}
-
-.quiz-difficulty {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  font-size: 0.8rem;
-  color: var(--text-main);
-}
-
-.quiz-content {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--text-main);
-}
-
-.quiz-question {
-  margin-bottom: 0.6rem;
-}
-
-.quiz-options {
-  list-style: none;
-  margin-left: 0.8rem;
-  font-size: 0.85rem;
-}
-
-.quiz-options li {
-  margin-bottom: 0.25rem;
-}
-
-.quiz-actions {
-  margin-top: 0.8rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.quiz-score {
-  font-size: 0.85rem;
-}
-
-/* =============== CONTACT =============== */
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1.2fr;
-  gap: 1rem;
-}
-
-.contact-form label {
-  font-size: 0.8rem;
-  margin-top: 0.3rem;
-  color: var(--text-main);
-}
-
-.contact-form input,
-.contact-form textarea {
-  width: 100%;
-  margin: 0.25rem 0 0.4rem;
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.8rem;
-  border: 1px solid var(--border-beige);
-  background: var(--bg-beige);
-  color: var(--text-main);
-  font-size: 0.85rem;
-}
-
-.contact-form textarea {
-  resize: vertical;
-}
-
-.contact-info {
-  list-style: none;
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text-main);
-}
-
-.form-status {
-  font-size: 0.8rem;
-  margin-top: 0.35rem;
-}
-
-/* =============== ABOUT =============== */
-.about-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1.2fr;
-  gap: 1rem;
-}
-
-.about-stats {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.about-stats .stat span {
-  font-size: 1.4rem;
-  font-weight: 600;
-  display: block;
-  color: var(--heading-color);
-}
-
-.about-stats .stat p {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-/* =============== FOOTER =============== */
-.footer {
-  text-align: center;
-  padding: 1rem;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-/* =============== PROFILE BUTTON & DROPDOWN =============== */
-.profile-wrapper {
-  position: relative;
-}
-
-.profile-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid var(--border-beige);
-  background: #ffffff;
-  cursor: pointer;
-  font-size: 0.85rem;
-  color: var(--text-main);
-  box-shadow: 0 4px 14px rgba(46, 58, 67, 0.16);
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
-}
-
-.profile-btn:hover {
-  background: #EAF3FB;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(46, 58, 67, 0.2);
-}
-
-.profile-avatar {
-  width: 24px;
-  height: 24px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--brown), var(--accent-blue));
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.profile-name {
-  white-space: nowrap;
-}
-
-.profile-caret {
-  font-size: 0.7rem;
-  color: #9CA3AF;
-}
-
-.profile-dropdown {
-  position: absolute;
-  top: 115%;
-  right: 0;
-  width: 260px;
-  background: #ffffff;
-  border-radius: 1rem;
-  box-shadow: 0 20px 50px rgba(46, 58, 67, 0.28);
-  border: 1px solid var(--border-beige);
-  padding: 0.8rem;
-  display: none;
-  z-index: 1500;
-}
-
-.profile-dropdown.open {
-  display: block;
-}
-
-.profile-header {
-  display: flex;
-  gap: 0.6rem;
-  align-items: center;
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--border-beige);
-  margin-bottom: 0.5rem;
-}
-
-.profile-avatar-large {
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--brown), var(--accent-blue));
-  color: #ffffff;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.profile-fullname {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--heading-color);
-}
-
-.profile-email {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-
-.profile-details {
-  font-size: 0.8rem;
-  color: var(--text-main);
-  margin-bottom: 0.7rem;
-}
-
-.profile-details p {
-  margin-bottom: 0.12rem;
-}
-
-.profile-details span {
-  font-weight: 600;
-  color: var(--heading-color);
-}
-
-.profile-logout-btn {
-  width: 100%;
-  border-radius: 999px;
-  border: none;
-  padding: 0.35rem 0.7rem;
-  font-size: 0.85rem;
-  cursor: pointer;
-  background: #FEE2E2;
-  color: #B91C1C;
-  font-weight: 500;
-  transition: background 0.2s ease, transform 0.1s ease;
-}
-
-.profile-logout-btn:hover {
-  background: #FECACA;
-  transform: translateY(-1px);
-}
-
-/* =============== 3D TILT + APPLE STYLE HOVER =============== */
-.card,
-.dashboard-card,
-.announcement-banner,
-.resource-stat,
-.forum-post,
-.todo-item,
-.about-stats .stat {
-  position: relative;
-  transform-style: preserve-3d;
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    background 0.25s ease,
-    opacity 0.25s ease;
-}
-
-/* Soft glow overlay */
-.card::before,
-.dashboard-card::before,
-.announcement-banner::before,
-.resource-stat::before,
-.forum-post::before,
-.todo-item::before,
-.about-stats .stat::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    circle at top left,
-    rgba(79, 163, 247, 0.25),
-    transparent 60%
-  );
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-}
-
-/* Active hover (JS adds .hover-active) */
-.card.hover-active,
-.dashboard-card.hover-active,
-.announcement-banner.hover-active,
-.resource-stat.hover-active,
-.forum-post.hover-active,
-.todo-item.hover-active,
-.about-stats .stat.hover-active {
-  box-shadow: 0 18px 48px rgba(46, 58, 67, 0.25);
-  background: #ffffff;
-}
-
-.card.hover-active::before,
-.dashboard-card.hover-active::before,
-.announcement-banner.hover-active::before,
-.resource-stat.hover-active::before,
-.forum-post.hover-active::before,
-.todo-item.hover-active::before,
-.about-stats .stat.hover-active::before {
-  opacity: 1;
-}
-
-/* =============== DARK THEME =============== */
-body.dark-theme {
-  background: radial-gradient(circle at top left, #111827, #020617);
-  color: #E5E7EB;
-}
-
-body.dark-theme .top-nav {
-  background: rgba(15, 23, 42, 0.96);
-  border-bottom-color: rgba(37, 99, 235, 0.4);
-}
-
-body.dark-theme .logo {
-  color: #E5E7EB;
-}
-
-body.dark-theme .top-nav-links a {
-  color: #E5E7EB;
-}
-
-body.dark-theme .top-nav-links a:hover,
-body.dark-theme .top-nav-links a.nav-active {
-  background: rgba(37, 99, 235, 0.35);
-  color: #F9FAFB;
-}
-
-body.dark-theme .theme-toggle {
-  background: #020617;
-  color: #E5E7EB;
-  border-color: rgba(55, 65, 81, 0.9);
-}
-
-body.dark-theme .side-nav {
-  background: #020617;
-  border-right-color: rgba(55, 65, 81, 0.9);
-}
-
-body.dark-theme .side-nav h2 {
-  color: #BFDBFE;
-}
-
-body.dark-theme .side-nav a {
-  color: #E5E7EB;
-}
-
-body.dark-theme .side-nav a:hover,
-body.dark-theme .side-nav a.nav-active {
-  background: rgba(37, 99, 235, 0.45);
-  color: #F9FAFB;
-}
-
-body.dark-theme .section {
-  background: #020617;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
-  border-color: rgba(55, 65, 81, 0.9);
-}
-
-body.dark-theme .section-header h1,
-body.dark-theme .section-header h2 {
-  color: #F9FAFB;
-}
-
-body.dark-theme .tagline {
-  color: #D1D5DB;
-}
-
-body.dark-theme .card,
-body.dark-theme .dashboard-card {
-  background: #020617;
-  border-color: rgba(55, 65, 81, 0.9);
-  box-shadow: 0 16px 46px rgba(0, 0, 0, 1);
-}
-
-body.dark-theme .card h3,
-body.dark-theme .dashboard-card h3 {
-  color: #F9FAFB;
-}
-
-body.dark-theme .mini-tagline {
-  color: #D1D5DB;
-}
-
-body.dark-theme .mini-stats li {
-  color: #F3F4F6;
-}
-
-body.dark-theme .event-list li,
-body.dark-theme .mini-calendar,
-body.dark-theme .resource-stat,
-body.dark-theme .forum-post,
-body.dark-theme .announcement-banner,
-body.dark-theme .todo-item {
-  background: #020617;
-  border-color: rgba(55, 65, 81, 0.9);
-  color: #F3F4F6;
-}
-
-body.dark-theme .resource-status,
-body.dark-theme .banner-meta,
-body.dark-theme .guidelines {
-  color: #E5E7EB;
-}
-
-body.dark-theme .data-table th,
-body.dark-theme .data-table td {
-  border-color: rgba(55, 65, 81, 0.9);
-}
-
-body.dark-theme .data-table th {
-  background: #020617;
-  color: #BFDBFE;
-}
-
-body.dark-theme .data-table tr:nth-child(even) {
-  background: rgba(15, 23, 42, 0.85);
-}
-
-body.dark-theme input,
-body.dark-theme textarea,
-body.dark-theme select {
-  background: #020617;
-  border-color: rgba(55, 65, 81, 0.9);
-  color: #E5E7EB;
-}
-
-body.dark-theme .timer-display {
-  background: radial-gradient(circle at top, #020617, #000000);
-  border-color: rgba(55, 65, 81, 0.9);
-  color: #E5E7EB;
-}
-
-body.dark-theme .profile-btn {
-  background: #020617;
-  border-color: rgba(55, 65, 81, 0.9);
-  color: #F3F4F6;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 1);
-}
-
-body.dark-theme .profile-dropdown {
-  background: #020617;
-  border-color: rgba(55, 65, 81, 0.9);
-  box-shadow: 0 22px 56px rgba(0, 0, 0, 1);
-}
-
-body.dark-theme .profile-fullname {
-  color: #F9FAFB;
-}
-
-body.dark-theme .profile-email,
-body.dark-theme .profile-details {
-  color: #E5E7EB;
-}
-
-body.dark-theme .profile-details span {
-  color: #F9FAFB;
-}
-
-body.dark-theme .profile-logout-btn {
-  background: rgba(248, 113, 113, 0.25);
-  color: #FECACA;
-}
-
-body.dark-theme .card.hover-active,
-body.dark-theme .dashboard-card.hover-active,
-body.dark-theme .announcement-banner.hover-active,
-body.dark-theme .resource-stat.hover-active,
-body.dark-theme .forum-post.hover-active,
-body.dark-theme .todo-item.hover-active,
-body.dark-theme .about-stats .stat.hover-active {
-  background: #020617;
-  box-shadow: 0 22px 64px rgba(0, 0, 0, 1);
-}
-
-body.dark-theme .card::before,
-body.dark-theme .dashboard-card::before,
-body.dark-theme .announcement-banner::before,
-body.dark-theme .resource-stat::before,
-body.dark-theme .forum-post::before,
-body.dark-theme .todo-item::before,
-body.dark-theme .about-stats .stat::before {
-  background: radial-gradient(
-    circle at top left,
-    rgba(79, 163, 247, 0.45),
-    transparent 60%
-  );
-}
-
-/* =============== RESPONSIVE =============== */
-@media (max-width: 1024px) {
-  .main-content {
-    margin-left: 0;
-    padding: 1rem;
+// script.js
+// ================== CAMPUS TIME PRO – MAIN JS ==================
+
+document.addEventListener("DOMContentLoaded", () => {
+  // --------- ELEMENT REFERENCES ---------
+  const body = document.body;
+
+  // Top nav / side nav
+  const themeToggleBtn = document.getElementById("themeToggle");
+  const navToggle = document.getElementById("navToggle");
+  const sideNav = document.getElementById("sideNav");
+  const sideNavBackdrop = document.getElementById("sideNavBackdrop");
+  const topNavLinks = document.querySelectorAll(".top-nav-links a");
+  const sideNavLinks = document.querySelectorAll(".side-nav a");
+  const homeDropdown = document.getElementById("homeDropdown");
+  const homeDropdownToggle = homeDropdown?.querySelector(".dropdown-toggle");
+  const sideHomeDropdown = document.getElementById("sideHomeDropdown");
+  const sideHomeDropdownToggle = sideHomeDropdown?.querySelector(".dropdown-toggle");
+
+  // Profile dropdown
+  const profileBtn = document.getElementById("profileBtn");
+  const profileDropdown = document.getElementById("profileDropdown");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  // Todo elements
+  const todoForm = document.getElementById("todoForm");
+  const todoTextInput = document.getElementById("todoText");
+  const todoDateInput = document.getElementById("todoDate");
+  const todoPrioritySelect = document.getElementById("todoPriority");
+  const todoList = document.getElementById("todoList");
+  const todoEmpty = document.getElementById("todoEmpty");
+  const TODO_STORAGE_KEY = "ctp-todo-items";
+
+  // Resources
+  const notesList = document.getElementById("notesList");
+  const pyqList = document.getElementById("pyqList");
+  const assignList = document.getElementById("assignList");
+  const paperList = document.getElementById("paperList");
+  const notesTotal = document.getElementById("notesTotal");
+  const notesCompleted = document.getElementById("notesCompleted");
+  const pyqTotal = document.getElementById("pyqTotal");
+  const pyqCompleted = document.getElementById("pyqCompleted");
+  const assignTotal = document.getElementById("assignTotal");
+  const assignCompleted = document.getElementById("assignCompleted");
+  const paperTotal = document.getElementById("paperTotal");
+  const paperCompleted = document.getElementById("paperCompleted");
+
+  // Announcements
+  const announcementFilter = document.getElementById("announcementFilter");
+  const announcementSort = document.getElementById("announcementSort");
+  const announcementContainer = document.getElementById("announcementContainer");
+  const announcementBanners = announcementContainer
+    ? Array.from(announcementContainer.querySelectorAll(".announcement-banner"))
+    : [];
+
+  // GPA
+  const calcGpaBtn = document.getElementById("calcGpaBtn");
+  const gpaResult = document.getElementById("gpaResult");
+
+  // Timers
+  const pomodoroDisplay = document.getElementById("pomodoroDisplay");
+  const pomodoroStart = document.getElementById("pomodoroStart");
+  const pomodoroPause = document.getElementById("pomodoroPause");
+  const pomodoroReset = document.getElementById("pomodoroReset");
+
+  const studyMinutesInput = document.getElementById("studyMinutes");
+  const studyDisplay = document.getElementById("studyDisplay");
+  const studyStart = document.getElementById("studyStart");
+  const studyPause = document.getElementById("studyPause");
+  const studyReset = document.getElementById("studyReset");
+
+  // Quiz
+  const quizSubject = document.getElementById("quizSubject");
+  const startQuizBtn = document.getElementById("startQuizBtn");
+  const quizContent = document.getElementById("quizContent");
+  const checkQuizBtn = document.getElementById("checkQuizBtn");
+  const quizScore = document.getElementById("quizScore");
+
+  // Contact form
+  const contactForm = document.getElementById("contactForm");
+  const contactStatus = document.getElementById("contactStatus");
+
+  // Sections for active nav
+  const sections = document.querySelectorAll("main .section");
+
+  // ================== THEME TOGGLE ==================
+  const THEME_KEY = "ctp-theme";
+
+  function applyTheme(theme) {
+    if (theme === "dark") {
+      body.classList.add("dark-theme");
+      if (themeToggleBtn) {
+        themeToggleBtn.textContent = "☀️";
+        themeToggleBtn.setAttribute("aria-label", "Switch to light theme");
+      }
+    } else {
+      body.classList.remove("dark-theme");
+      if (themeToggleBtn) {
+        themeToggleBtn.textContent = "🌙";
+        themeToggleBtn.setAttribute("aria-label", "Switch to dark theme");
+      }
+    }
   }
 
-  .side-nav {
-    position: fixed;
-    left: -260px;
-    transition: left 0.25s ease;
+  function initTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const theme = saved || (prefersDark ? "dark" : "light");
+    applyTheme(theme);
   }
 
-  .side-nav.open {
-    left: 0;
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", () => {
+      const isDark = body.classList.contains("dark-theme");
+      const newTheme = isDark ? "light" : "dark";
+      applyTheme(newTheme);
+      localStorage.setItem(THEME_KEY, newTheme);
+    });
   }
 
-  .nav-toggle {
-    display: block;
+  initTheme();
+
+  // ================== MOBILE NAV / SIDE NAV ==================
+  function openSideNav() {
+    if (!sideNav || !sideNavBackdrop) return;
+    sideNav.classList.add("open");
+    sideNavBackdrop.classList.add("open");
   }
 
-  .top-nav-links {
-    display: none;
+  function closeSideNav() {
+    if (!sideNav || !sideNavBackdrop) return;
+    sideNav.classList.remove("open");
+    sideNavBackdrop.classList.remove("open");
   }
 
-  .hero-grid,
-  .calendar-layout,
-  .tasks-layout,
-  .doubts-grid,
-  .contact-grid,
-  .about-grid {
-    grid-template-columns: 1fr;
-  }
-}
+  if (navToggle && sideNav && sideNavBackdrop) {
+    navToggle.addEventListener("click", () => {
+      if (sideNav.classList.contains("open")) {
+        closeSideNav();
+      } else {
+        openSideNav();
+      }
+    });
 
-@media (max-width: 640px) {
-  .section {
-    padding: 1.2rem;
-  }
+    sideNavBackdrop.addEventListener("click", closeSideNav);
 
-  .hero-grid {
-    gap: 1rem;
-  }
-
-  .todo-form {
-    grid-template-columns: 1fr;
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1024) {
+        closeSideNav();
+      }
+    });
   }
 
-  .announcement-controls {
-    flex-direction: column;
-    align-items: flex-start;
+  // Close side nav on clicking any side nav link (on mobile)
+  sideNavLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      if (window.innerWidth <= 1024) {
+        closeSideNav();
+      }
+    });
+  });
+
+  function setHomeDropdownState(isOpen) {
+    if (!homeDropdown || !homeDropdownToggle) return;
+    homeDropdown.classList.toggle("open", isOpen);
+    homeDropdownToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
   }
 
-  .table-scroll-hint {
-    display: block;
+  function setSideHomeDropdownState(isOpen) {
+    if (!sideHomeDropdown || !sideHomeDropdownToggle) return;
+    sideHomeDropdown.classList.toggle("open", isOpen);
+    sideHomeDropdownToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
   }
 
-  .analytics-bar-track {
-    height: 60px;
+  if (homeDropdownToggle) {
+    homeDropdownToggle.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const currentlyOpen = homeDropdown.classList.contains("open");
+      setHomeDropdownState(!currentlyOpen);
+    });
   }
 
-  .detail-main {
-    padding: 4rem 1.1rem 2rem;
+  if (sideHomeDropdownToggle) {
+    sideHomeDropdownToggle.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const currentlyOpen = sideHomeDropdown.classList.contains("open");
+      setSideHomeDropdownState(!currentlyOpen);
+    });
   }
 
-  .detail-section {
-    padding: 1.8rem 1.2rem;
+  document.addEventListener("click", (event) => {
+    if (homeDropdown && !homeDropdown.contains(event.target)) {
+      setHomeDropdownState(false);
+    }
+    if (sideHomeDropdown && !sideHomeDropdown.contains(event.target)) {
+      setSideHomeDropdownState(false);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setHomeDropdownState(false);
+      setSideHomeDropdownState(false);
+    }
+  });
+
+  // ================== PROFILE DROPDOWN ==================
+  function closeProfileDropdown() {
+    if (profileDropdown) {
+      profileDropdown.classList.remove("open");
+    }
   }
-}
+
+  if (profileBtn && profileDropdown) {
+    profileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      profileDropdown.classList.toggle("open");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (
+        profileDropdown.classList.contains("open") &&
+        !profileDropdown.contains(e.target) &&
+        e.target !== profileBtn
+      ) {
+        closeProfileDropdown();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeProfileDropdown();
+      }
+    });
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      alert("Logout successful (demo only – no real auth implemented).");
+      closeProfileDropdown();
+    });
+  }
+
+  // ================== ACTIVE NAV LINK ON SCROLL ==================
+  const allNavLinks = [...topNavLinks, ...sideNavLinks];
+
+  function setActiveNav(sectionId) {
+    allNavLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+      if (href === `#${sectionId}`) {
+        link.classList.add("nav-active");
+      } else {
+        link.classList.remove("nav-active");
+      }
+    });
+  }
+
+  function onScrollHighlightNav() {
+    let currentSectionId = "home";
+    const offset = 120;
+
+    sections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      if (window.scrollY + offset >= top) {
+        currentSectionId = section.id || currentSectionId;
+      }
+    });
+
+    setActiveNav(currentSectionId);
+  }
+
+  window.addEventListener("scroll", onScrollHighlightNav);
+  onScrollHighlightNav();
+
+  // When clicking nav links, also highlight immediately
+  allNavLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      const targetId = link.getAttribute("href")?.replace("#", "");
+      if (targetId) {
+        setActiveNav(targetId);
+      }
+    });
+  });
+
+//   // ================== 3D TILT HOVER (INNER CARDS ONLY) ==================
+// const TILT_SELECTOR = [
+//   ".card",
+//   ".dashboard-card",
+//   ".announcement-banner",
+//   ".resource-stat",
+//   ".todo-item",
+//   ".analytics-card",
+//   ".forum-post",
+//   ".features-grid > div",
+//   ".timer-display",
+//   ".quiz-layout",
+//   ".gpa-table",
+//   ".contact-form"
+// ].join(", ");
+
+// function addTiltEffect(el) {
+//   if (!el) return;
+
+//   const MAX_ROTATE = 16;        // tilt angle
+//   const MAX_TRANSLATE_Y = 10;   // lift
+//   const SCALE = 1.04;           // zoom
+
+//   el.addEventListener("pointermove", (e) => {
+//     const rect = el.getBoundingClientRect();
+//     const relX = (e.clientX - rect.left) / rect.width - 0.5;
+//     const relY = (e.clientY - rect.top) / rect.height - 0.5;
+
+//     const rotateX = relY * -MAX_ROTATE;
+//     const rotateY = relX * MAX_ROTATE;
+
+//     el.style.transform =
+//       `perspective(850px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) ` +
+//       `translateY(-${MAX_TRANSLATE_Y}px) scale(${SCALE})`;
+
+//     el.classList.add("hover-active");
+//   });
+
+//   el.addEventListener("pointerleave", () => {
+//     el.style.transform =
+//       "perspective(850px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)";
+//     el.classList.remove("hover-active");
+//   });
+// }
+
+// document.querySelectorAll(TILT_SELECTOR).forEach(addTiltEffect);
+
+  // ================== TODO LIST ==================
+  let todos = [];
+
+  function loadTodos() {
+    try {
+      const stored = localStorage.getItem(TODO_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          todos = parsed;
+        }
+      }
+    } catch (err) {
+      console.error("Failed to load todos:", err);
+    }
+  }
+
+  function saveTodos() {
+    try {
+      localStorage.setItem(TODO_STORAGE_KEY, JSON.stringify(todos));
+    } catch (err) {
+      console.error("Failed to save todos:", err);
+    }
+  }
+
+  function formatDate(isoString) {
+    if (!isoString) return "";
+    const date = new Date(isoString);
+    if (isNaN(date.getTime())) return isoString;
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  function renderTodos() {
+    if (!todoList) return;
+
+    todoList.innerHTML = "";
+    if (!todos.length) {
+      if (todoEmpty) {
+        todoEmpty.textContent = "No tasks yet. Add your first task above ✨";
+      }
+      return;
+    }
+
+    if (todoEmpty) {
+      todoEmpty.textContent = "";
+    }
+
+    // Sort by due date (earliest first) then by priority
+    const priorityOrder = { High: 1, Medium: 2, Low: 3 };
+    const sorted = [...todos].sort((a, b) => {
+      if (a.date !== b.date) {
+        return (a.date || "").localeCompare(b.date || "");
+      }
+      return (priorityOrder[a.priority] || 99) - (priorityOrder[b.priority] || 99);
+    });
+
+    sorted.forEach((todo) => {
+      const li = document.createElement("li");
+      li.className = "todo-item";
+      if (todo.completed) {
+        li.classList.add("todo-completed");
+      }
+
+      li.innerHTML = `
+        <div class="todo-main">
+          <input type="checkbox" ${todo.completed ? "checked" : ""} aria-label="Mark task as done">
+          <span class="todo-text"></span>
+        </div>
+        <div class="todo-meta">
+          <span class="todo-date">${todo.date ? "Due: " + formatDate(todo.date) : ""}</span>
+          <span class="todo-priority ${todo.priority}">${todo.priority}</span>
+        </div>
+      `;
+
+      const textSpan = li.querySelector(".todo-text");
+      if (textSpan) textSpan.textContent = todo.text;
+
+      const checkbox = li.querySelector('input[type="checkbox"]');
+      if (checkbox) {
+        checkbox.addEventListener("change", () => {
+          todo.completed = checkbox.checked;
+          if (todo.completed) {
+            li.classList.add("todo-completed");
+          } else {
+            li.classList.remove("todo-completed");
+          }
+          saveTodos();
+        });
+      }
+
+      todoList.appendChild(li);
+      // Add tilt effect to new items
+      addTiltEffect(li);
+    });
+  }
+
+  if (todoForm && todoTextInput && todoDateInput && todoPrioritySelect) {
+    todoForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const text = todoTextInput.value.trim();
+      const date = todoDateInput.value;
+      const priority = todoPrioritySelect.value;
+
+      if (!text || !date || !priority) return;
+
+      const newTodo = {
+        id: Date.now(),
+        text,
+        date,
+        priority,
+        completed: false,
+      };
+
+      todos.push(newTodo);
+      saveTodos();
+
+      // Clear inputs
+      todoTextInput.value = "";
+      todoDateInput.value = "";
+      todoPrioritySelect.value = "";
+
+      renderTodos();
+    });
+
+    loadTodos();
+    renderTodos();
+  }
+
+  // ================== RESOURCES DATA & COUNTERS ==================
+  const resourcesData = {
+    notes: [
+      { subject: "Data Structures", detail: "Unit 1 – Arrays & Linked Lists", done: true },
+      { subject: "Maths II", detail: "Integration & Differential Equations", done: false },
+      { subject: "OS", detail: "Process Management Notes", done: true },
+    ],
+    pyq: [
+      { subject: "DSA", detail: "Mid-Sem PYQ (2023)", done: true },
+      { subject: "CN", detail: "End-Sem PYQ (2 sets)", done: false },
+    ],
+    assignments: [
+      { subject: "CN", detail: "Routing Algorithms Sheet", done: false },
+      { subject: "OS", detail: "Scheduling Algorithms Lab", done: true },
+    ],
+    papers: [
+      { subject: "DSA", detail: "University Paper 2022", done: true },
+      { subject: "Maths II", detail: "University Paper 2021", done: false },
+    ],
+  };
+
+  function renderResourceList(listEl, items, totalEl, completedEl) {
+    if (!listEl || !Array.isArray(items)) return;
+
+    listEl.innerHTML = "";
+    let completedCount = 0;
+
+    items.forEach((item) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <span>${item.subject} – ${item.detail}</span>
+        <span class="resource-status">${item.done ? "Done ✅" : "Pending"}</span>
+      `;
+      listEl.appendChild(li);
+      if (item.done) completedCount++;
+    });
+
+    if (totalEl) totalEl.textContent = items.length.toString();
+    if (completedEl) completedEl.textContent = completedCount.toString();
+  }
+
+  if (notesList && pyqList && assignList && paperList) {
+    renderResourceList(
+      notesList,
+      resourcesData.notes,
+      notesTotal,
+      notesCompleted
+    );
+    renderResourceList(
+      pyqList,
+      resourcesData.pyq,
+      pyqTotal,
+      pyqCompleted
+    );
+    renderResourceList(
+      assignList,
+      resourcesData.assignments,
+      assignTotal,
+      assignCompleted
+    );
+    renderResourceList(
+      paperList,
+      resourcesData.papers,
+      paperTotal,
+      paperCompleted
+    );
+  }
+
+  // ================== ANNOUNCEMENTS FILTER & SORT ==================
+  function updateAnnouncements() {
+    if (!announcementContainer || !announcementFilter || !announcementSort) return;
+
+    const filterVal = announcementFilter.value; // "all" | "tech" | "sports" | ...
+    const sortVal = announcementSort.value; // "date" | "priority"
+
+    const filtered = announcementBanners.filter((banner) => {
+      if (filterVal === "all") return true;
+      const type = banner.dataset.type || "";
+      return type === filterVal;
+    });
+
+    // Sort
+    filtered.sort((a, b) => {
+      if (sortVal === "priority") {
+        const pa = parseInt(a.dataset.priority || "99", 10);
+        const pb = parseInt(b.dataset.priority || "99", 10);
+        return pa - pb; // 1 = high, 3 = low
+      } else {
+        // date sort
+        const da = a.dataset.date || "";
+        const db = b.dataset.date || "";
+        return da.localeCompare(db);
+      }
+    });
+
+    // Clear container and re-append in correct order (including filtered only)
+    announcementContainer.innerHTML = "";
+    filtered.forEach((banner) => {
+      announcementContainer.appendChild(banner);
+    });
+  }
+
+  if (announcementFilter && announcementSort) {
+    announcementFilter.addEventListener("change", updateAnnouncements);
+    announcementSort.addEventListener("change", updateAnnouncements);
+    updateAnnouncements();
+  }
+
+  // ================== GPA CALCULATOR ==================
+  function gradeToPoints(gradeStr) {
+    const g = (gradeStr || "").trim().toUpperCase();
+    switch (g) {
+      case "O":
+        return 10;
+      case "A":
+        return 9;
+      case "B":
+        return 8;
+      case "C":
+        return 7;
+      case "D":
+        return 6;
+      case "F":
+        return 0;
+      default:
+        return null;
+    }
+  }
+
+  if (calcGpaBtn && gpaResult) {
+    calcGpaBtn.addEventListener("click", () => {
+      const rows = document.querySelectorAll(".gpa-table tbody tr");
+      let totalCredits = 0;
+      let totalPoints = 0;
+
+      rows.forEach((row) => {
+        const inputs = row.querySelectorAll("input");
+        if (inputs.length < 3) return;
+        const credits = parseFloat(inputs[1].value);
+        const grade = inputs[2].value;
+        const points = gradeToPoints(grade);
+
+        if (!isNaN(credits) && credits > 0 && points !== null) {
+          totalCredits += credits;
+          totalPoints += credits * points;
+        }
+      });
+
+      if (!totalCredits) {
+        gpaResult.textContent =
+          "Estimated GPA: – (please enter valid credits & grades)";
+        gpaResult.classList.remove("gpa-result-highlight");
+        return;
+      }
+
+      const gpa = (totalPoints / totalCredits).toFixed(2);
+      gpaResult.textContent = `Estimated GPA: ${gpa}`;
+      gpaResult.classList.add("gpa-result-highlight");
+
+      setTimeout(() => {
+        gpaResult.classList.remove("gpa-result-highlight");
+      }, 1000);
+    });
+  }
+
+  // ================== POMODORO TIMER ==================
+  let pomodoroSeconds = 25 * 60;
+  let pomodoroInterval = null;
+
+  function updatePomodoroDisplay() {
+    if (!pomodoroDisplay) return;
+    const m = Math.floor(pomodoroSeconds / 60);
+    const s = pomodoroSeconds % 60;
+    pomodoroDisplay.textContent = `${String(m).padStart(2, "0")}:${String(
+      s
+    ).padStart(2, "0")}`;
+  }
+
+  function startPomodoro() {
+    if (!pomodoroDisplay || pomodoroInterval !== null) return;
+    pomodoroInterval = setInterval(() => {
+      pomodoroSeconds--;
+      if (pomodoroSeconds <= 0) {
+        pomodoroSeconds = 0;
+        clearInterval(pomodoroInterval);
+        pomodoroInterval = null;
+        alert("Pomodoro session complete! Take a short break. 🎉");
+      }
+      updatePomodoroDisplay();
+    }, 1000);
+  }
+
+  function pausePomodoro() {
+    if (pomodoroInterval !== null) {
+      clearInterval(pomodoroInterval);
+      pomodoroInterval = null;
+    }
+  }
+
+  function resetPomodoro() {
+    pausePomodoro();
+    pomodoroSeconds = 25 * 60;
+    updatePomodoroDisplay();
+  }
+
+  if (pomodoroDisplay) updatePomodoroDisplay();
+  if (pomodoroStart) pomodoroStart.addEventListener("click", startPomodoro);
+  if (pomodoroPause) pomodoroPause.addEventListener("click", pausePomodoro);
+  if (pomodoroReset) pomodoroReset.addEventListener("click", resetPomodoro);
+
+  // ================== CUSTOM STUDY TIMER ==================
+  let studySeconds =
+    (parseInt(studyMinutesInput?.value || "45", 10) || 45) * 60;
+  let studyInterval = null;
+
+  function updateStudyDisplay() {
+    if (!studyDisplay) return;
+    const m = Math.floor(studySeconds / 60);
+    const s = studySeconds % 60;
+    studyDisplay.textContent = `${String(m).padStart(2, "0")}:${String(
+      s
+    ).padStart(2, "0")}`;
+  }
+
+  function syncStudySecondsFromInput() {
+    const minutes = parseInt(studyMinutesInput?.value || "0", 10);
+    if (!isNaN(minutes) && minutes > 0) {
+      studySeconds = minutes * 60;
+    } else {
+      studySeconds = 0;
+    }
+    updateStudyDisplay();
+  }
+
+  function startStudy() {
+    if (!studyDisplay || studyInterval !== null) return;
+    if (studySeconds <= 0) {
+      syncStudySecondsFromInput();
+    }
+    if (studySeconds <= 0) return; // nothing to run
+
+    studyInterval = setInterval(() => {
+      studySeconds--;
+      if (studySeconds <= 0) {
+        studySeconds = 0;
+        clearInterval(studyInterval);
+        studyInterval = null;
+        alert("Study session complete! Great job. 📚");
+      }
+      updateStudyDisplay();
+    }, 1000);
+  }
+
+  function pauseStudy() {
+    if (studyInterval !== null) {
+      clearInterval(studyInterval);
+      studyInterval = null;
+    }
+  }
+
+  function resetStudy() {
+    pauseStudy();
+    syncStudySecondsFromInput();
+  }
+
+  if (studyDisplay) updateStudyDisplay();
+  if (studyMinutesInput) {
+    studyMinutesInput.addEventListener("change", syncStudySecondsFromInput);
+    studyMinutesInput.addEventListener("input", syncStudySecondsFromInput);
+  }
+  if (studyStart) studyStart.addEventListener("click", startStudy);
+  if (studyPause) studyPause.addEventListener("click", pauseStudy);
+  if (studyReset) studyReset.addEventListener("click", resetStudy);
+
+  // ================== QUIZ SYSTEM ==================
+  const quizBank = {
+    DSA: {
+      Beginner: [
+        {
+          q: "Which data structure uses LIFO (Last In First Out)?",
+          options: ["Queue", "Stack", "Array", "Linked List"],
+          correct: 1,
+        },
+        {
+          q: "What is the worst-case time complexity of linear search?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+          correct: 2,
+        },
+      ],
+      Intermediate: [
+        {
+          q: "Time complexity of merge sort in worst case?",
+          options: ["O(n)", "O(n log n)", "O(log n)", "O(n²)"],
+          correct: 1,
+        },
+        {
+          q: "Which traversal gives sorted order for BST?",
+          options: ["Preorder", "Postorder", "Inorder", "Level order"],
+          correct: 2,
+        },
+      ],
+      Advanced: [
+        {
+          q: "Which of the following is NOT a self-balancing BST?",
+          options: ["AVL tree", "Red-Black tree", "Splay tree", "Binary Heap"],
+          correct: 3,
+        },
+        {
+          q: "Amortized time complexity of push/pop in stack implemented using dynamic array?",
+          options: ["O(1)", "O(n)", "O(log n)", "O(n log n)"],
+          correct: 0,
+        },
+      ],
+    },
+    Maths: {
+      Beginner: [
+        {
+          q: "Derivative of x² with respect to x is?",
+          options: ["x", "2x", "x²", "2"],
+          correct: 1,
+        },
+        {
+          q: "Integral of 1/x dx is?",
+          options: ["x", "x²/2", "ln|x| + C", "eˣ + C"],
+          correct: 2,
+        },
+      ],
+      Intermediate: [
+        {
+          q: "Laplace transform of 1 is?",
+          options: ["1/s", "s", "1", "0"],
+          correct: 0,
+        },
+        {
+          q: "If A is an n×n matrix, rank(A) ≤ ?",
+          options: ["0", "1", "n", "n²"],
+          correct: 2,
+        },
+      ],
+      Advanced: [
+        {
+          q: "If λ is eigenvalue of matrix A, eigenvalues of kA are:",
+          options: ["λ", "kλ", "k²λ", "λ/k"],
+          correct: 1,
+        },
+        {
+          q: "Fourier series is used to represent:",
+          options: [
+            "Only polynomials",
+            "Only exponentials",
+            "Any periodic function",
+            "Only trigonometric functions",
+          ],
+          correct: 2,
+        },
+      ],
+    },
+    CN: {
+      Beginner: [
+        {
+          q: "Which layer does IP address belong to?",
+          options: ["Physical", "Data Link", "Network", "Application"],
+          correct: 2,
+        },
+        {
+          q: "Full form of TCP?",
+          options: [
+            "Transmission Control Protocol",
+            "Transfer Control Protocol",
+            "Total Control Protocol",
+            "Transport Central Protocol",
+          ],
+          correct: 0,
+        },
+      ],
+      Intermediate: [
+        {
+          q: "Which protocol is used to find MAC address from IP address?",
+          options: ["DNS", "ARP", "HTTP", "ICMP"],
+          correct: 1,
+        },
+        {
+          q: "Which topology has a single point of failure at central hub?",
+          options: ["Bus", "Ring", "Star", "Mesh"],
+          correct: 2,
+        },
+      ],
+      Advanced: [
+        {
+          q: "In subnetting, number of hosts per subnet is given by:",
+          options: ["2^n", "2^n - 1", "2^n - 2", "2^(n-1)"],
+          correct: 2,
+        },
+        {
+          q: "Which routing algorithm uses the Bellman-Ford algorithm?",
+          options: [
+            "Link state routing",
+            "Distance vector routing",
+            "Path vector routing",
+            "Flooding",
+          ],
+          correct: 1,
+        },
+      ],
+    },
+    OS: {
+      Beginner: [
+        {
+          q: "Which OS component manages CPU scheduling?",
+          options: ["Shell", "Compiler", "Kernel", "File system"],
+          correct: 2,
+        },
+        {
+          q: "Which of these is NOT a scheduling algorithm?",
+          options: ["FCFS", "SJF", "Round Robin", "RSA"],
+          correct: 3,
+        },
+      ],
+      Intermediate: [
+        {
+          q: "Which of the following is a deadlock avoidance algorithm?",
+          options: ["Banker's Algorithm", "Round Robin", "FCFS", "FIFO"],
+          correct: 0,
+        },
+        {
+          q: "Thrashing is related to:",
+          options: [
+            "CPU scheduling",
+            "Deadlock",
+            "Paging / Memory",
+            "File management",
+          ],
+          correct: 2,
+        },
+      ],
+      Advanced: [
+        {
+          q: "In demand paging, 'page fault' occurs when:",
+          options: [
+            "Page is in memory",
+            "Page is not in memory",
+            "Page is swapped out",
+            "TLB is full",
+          ],
+          correct: 1,
+        },
+        {
+          q: "Which is NOT a page replacement algorithm?",
+          options: ["LRU", "FIFO", "Optimal", "CRC"],
+          correct: 3,
+        },
+      ],
+    },
+  };
+
+  let currentQuizQuestions = [];
+
+  function loadQuiz() {
+    if (!quizSubject || !quizContent || !quizScore) return;
+
+    const subject = quizSubject.value;
+    const difficulty = (
+      document.querySelector('input[name="difficulty"]:checked') || {
+        value: "Beginner",
+      }
+    ).value;
+
+    const subjectBank = quizBank[subject];
+    if (!subjectBank || !subjectBank[difficulty]) {
+      quizContent.innerHTML =
+        '<p class="mini-tagline">No questions found for this combination.</p>';
+      currentQuizQuestions = [];
+      quizScore.textContent = "";
+      return;
+    }
+
+    currentQuizQuestions = subjectBank[difficulty];
+    quizScore.textContent = "";
+
+    let html = "";
+    currentQuizQuestions.forEach((qObj, index) => {
+      html += `
+        <div class="quiz-question">
+          <p><strong>Q${index + 1}.</strong> ${qObj.q}</p>
+          <ul class="quiz-options">
+            ${qObj.options
+              .map(
+                (opt, optIndex) => `
+              <li>
+                <label>
+                  <input type="radio" name="q${index}" value="${optIndex}">
+                  ${opt}
+                </label>
+              </li>
+            `
+              )
+              .join("")}
+          </ul>
+        </div>
+      `;
+    });
+
+    quizContent.innerHTML = html;
+  }
+
+  function checkQuizScore() {
+    if (!quizScore) return;
+    if (!currentQuizQuestions.length) {
+      quizScore.textContent =
+        "Load a quiz first before checking the score.";
+      return;
+    }
+
+    let score = 0;
+
+    currentQuizQuestions.forEach((qObj, index) => {
+      const chosen = document.querySelector(
+        `input[name="q${index}"]:checked`
+      );
+      if (!chosen) return;
+      const chosenIndex = parseInt(chosen.value, 10);
+      if (chosenIndex === qObj.correct) score++;
+    });
+
+    quizScore.textContent = `Your score: ${score} / ${currentQuizQuestions.length}`;
+  }
+
+  if (startQuizBtn) startQuizBtn.addEventListener("click", loadQuiz);
+  if (checkQuizBtn) checkQuizBtn.addEventListener("click", checkQuizScore);
+
+  // ================== CONTACT FORM (DEMO) ==================
+  if (contactForm && contactStatus) {
+    contactForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("contactName")?.value || "Student";
+
+      contactStatus.textContent = `Thanks, ${name}! Your message has been recorded (demo).`;
+      contactStatus.style.color = "#15803d";
+
+      contactForm.reset();
+    });
+  }
+
+  // ================== DOUBT FORMS (DEMO) ==================
+  const doubtForms = document.querySelectorAll(".doubt-form");
+  doubtForms.forEach((form) => {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("Your doubt has been submitted to the dashboard (demo).");
+      form.reset();
+    });
+  });
+});
