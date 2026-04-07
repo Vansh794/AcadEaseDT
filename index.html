@@ -26,16 +26,46 @@
     </div>
 
     <nav class="top-nav-links">
-      <a href="#home">Home</a>
-      <a href="#calendar">Calendar</a>
-      <a href="#exams">Exams</a>
-      <a href="#tasks">Tasks</a>
-      <a href="#resources">Resources</a>
-      <a href="#announcements">Announcements</a>
-      <a href="#features">Features</a>
-      <a href="#quiz">Quiz</a>
-      <a href="#doubts">Doubts</a>
-      <a href="#contact">Contact</a>
+      <div class="nav-dropdown" id="homeDropdown">
+        <button
+          class="dropdown-toggle"
+          type="button"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Home
+          <span class="dropdown-caret" aria-hidden="true">▾</span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-label="Home quick links">
+          <li role="none">
+            <a role="menuitem" href="index.html">Return to Home View</a>
+          </li>
+          <li role="none">
+            <a role="menuitem" href="section.html?section=calendar">Calendar</a>
+          </li>
+          <li role="none">
+            <a role="menuitem" href="section.html?section=exams">Exams</a>
+          </li>
+          <li role="none">
+            <a role="menuitem" href="section.html?section=tasks">Tasks</a>
+          </li>
+          <li role="none">
+            <a role="menuitem" href="section.html?section=doubts">Doubts</a>
+          </li>
+          <li role="none">
+            <a role="menuitem" href="section.html?section=resources">Resources</a>
+          </li>
+        </ul>
+      </div>
+      <a href="section.html?section=calendar">Calendar</a>
+      <a href="section.html?section=exams">Exams</a>
+      <a href="section.html?section=tasks">Tasks</a>
+      <a href="section.html?section=resources">Resources</a>
+      <a href="section.html?section=announcements">Announcements</a>
+      <a href="section.html?section=features">Features</a>
+      <a href="section.html?section=quiz">Quiz</a>
+      <a href="section.html?section=doubts">Doubts</a>
+      <a href="section.html?section=contact">Contact</a>
     </nav>
 
     <!-- Top-right actions: theme toggle, profile, mobile nav -->
@@ -61,14 +91,14 @@
           <div class="profile-header">
             <div class="profile-avatar-large">VM</div>
             <div>
-              <p class="profile-fullname">Vaibhav Mittal</p>
-              <p class="profile-email">vaibhav.mittal23@college.edu</p>
+              <p class="profile-fullname">Vansh Baranwal</p>
+              <p class="profile-email">vanshbaranwal834@college.edu</p>
             </div>
           </div>
           <div class="profile-details">
-            <p><span>Roll No:</span> 23CS101</p>
-            <p><span>Branch:</span> Computer Science & Engineering</p>
-            <p><span>Section:</span> CSE-A</p>
+            <p><span>Roll No:</span> 202501100400355</p>
+            <p><span>Branch:</span>Artificial Intelligence & Machine Learning</p>
+            <p><span>Section:</span> E</p>
             <p><span>Course:</span> B.Tech</p>
             <p><span>Semester:</span> 2nd</p>
           </div>
@@ -88,20 +118,31 @@
   <!-- Side Navigation Bar -->
   <aside class="side-nav" id="sideNav">
     <h2>Navigate</h2>
-    <ul>
-      <li><a href="#home">🏠 Home</a></li>
-      <li><a href="#dashboard">📊 Dashboard</a></li>
-      <li><a href="#calendar">📅 Calendar</a></li>
-      <li><a href="#exams">📝 Exams</a></li>
-      <li><a href="#tasks">✅ Tasks</a></li>
-      <li><a href="#resources">📚 Resources</a></li>
-      <li><a href="#doubts">❓ Doubts</a></li>
-      <li><a href="#announcements">📣 Announcements</a></li>
-      <li><a href="#features">⚙️ Features</a></li>
-      <li><a href="#quiz">🧠 Quiz</a></li>
-      <li><a href="#about">ℹ️ About</a></li>
-      <li><a href="#contact">📨 Contact</a></li>
-    </ul>
+    <div class="side-nav-dropdown" id="sideHomeDropdown">
+      <button
+        class="dropdown-toggle"
+        type="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        Home
+        <span class="dropdown-caret" aria-hidden="true">▾</span>
+      </button>
+      <ul class="dropdown-menu side-nav-menu" role="menu" aria-label="Navigate options">
+        <li role="none"><a role="menuitem" href="#home">🏠 Home</a></li>
+        <li role="none"><a role="menuitem" href="#dashboard">📊 Dashboard</a></li>
+        <li role="none"><a role="menuitem" href="#calendar">📅 Calendar</a></li>
+        <li role="none"><a role="menuitem" href="#exams">📝 Exams</a></li>
+        <li role="none"><a role="menuitem" href="#tasks">✅ Tasks</a></li>
+        <li role="none"><a role="menuitem" href="#resources">📚 Resources</a></li>
+        <li role="none"><a role="menuitem" href="#doubts">❓ Doubts</a></li>
+        <li role="none"><a role="menuitem" href="#announcements">📣 Announcements</a></li>
+        <li role="none"><a role="menuitem" href="#features">⚙️ Features</a></li>
+        <li role="none"><a role="menuitem" href="#quiz">🧠 Quiz</a></li>
+        <li role="none"><a role="menuitem" href="#about">ℹ️ About</a></li>
+        <li role="none"><a role="menuitem" href="#contact">📨 Contact</a></li>
+      </ul>
+    </div>
   </aside>
 
   <!-- Backdrop for mobile side nav -->
@@ -485,7 +526,9 @@
             placeholder="Add a new task (e.g., Revise DSA stack)"
             required
           />
+          <label for="todoDate">Due Date</label>
           <input type="date" id="todoDate" required />
+          <label for="todoPriority">Priority</label>
           <select id="todoPriority" required>
             <option value="">Priority</option>
             <option value="High">High</option>
